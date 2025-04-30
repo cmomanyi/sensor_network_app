@@ -16,4 +16,18 @@ This applications does a simulation of different sensor networks, Soil sensor ne
 - Detect cyber-physical threats like unauthorized access, jamming, tampering, or anomalous behavior.
 - Protect the system from attacks targeting IoT infrastructure.
 
+#Project Structure
+
+React Frontend <br>
+| <br>
+| REST / WebSocket <br>
+▼<br>
+FastAPI Backend ── Sensor Simulators <br>
+
+├── SoilSensor <br>
+├── AtmosphericSensor <br>
+├── PlantHealthSensor <br>
+└── ThreatDetectionSensor <br>
+
+
 
