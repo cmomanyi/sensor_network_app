@@ -1,77 +1,40 @@
-
-from fastapi import FastAPI
-from pydantic import BaseModel
-from fastapi.middleware.cors import CORSMiddleware
-import random
+from fastapi import FastAPI, BackgroundTasks
+from sensor import simulate_sensor
+from gateway_lxfta import process_sensor_data, WHITELIST_IDS, log_event
+from api_simulator import receive_data_from_gateway
+from crypto_utils import generate_ecc_key_pair
+import json
 
 app = FastAPI()
 
-# Allow frontend from localhost:3000
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Setup keys and whitelist
+sensor_private, sensor_public = generate_ecc_key_pair()
+gateway_private, gateway_public = generate_ecc_key_pair()
+shared_aes_key = b"thisisakey123456"
 
-# --- Soil Sensor Models & Endpoint ---
-class SoilData(BaseModel):
-    sensor_id: str
-    temperature: float
-    moisture: float
-    ph: float
-    nutrient_level: float
-    battery_level: float
-    status: str
+@app.get("/sensor/{sensor_type}")
+def get_sensor_data(sensor_type: str, background_tasks: BackgroundTasks):
+    sensor_data = simulate_sensor(sensor_type, shared_aes_key)
+    WHITELIST_IDS.add(sensor_data["sensor_id"])
+    processed = process_sensor_data(sensor_data, shared_aes_key)
 
-soil_status_options = ["active", "sleeping", "compromised"]
+    if "Decryption failed" not in processed:
+        log = {
+            "sensor_id": sensor_data["sensor_id"],
+            "type": sensor_type,
+            "data": json.loads(processed)
+        }
+        background_tasks.add_task(receive_data_from_gateway, log)
+        return log
+    else:
+        return {"error": processed}
 
-@app.get("/api/soil")
-def get_soil_data():
-    sensors =[]
-    for i in range(5):
-        sensors.append(SoilData(
-        sensor_id=f"soil-{1000 + i}",
-        temperature=round(random.uniform(15.0, 35.0), 2),
-        moisture=round(random.uniform(20.0, 80.0), 2),
-        ph=round(random.uniform(5.5, 7.5), 2),
-        nutrient_level=round(random.uniform(1.0, 5.0), 2),
-        battery_level=round(random.uniform(10.0, 100.0), 2),
-        status=random.choice(soil_status_options)
-    ))
-    return sensors
-
-# --- Atmospheric Sensor Models & Endpoint ---
-class AtmosphericData(BaseModel):
-    sensor_id: str
-    air_temperature: float
-    humidity: float
-    co2: float
-    wind_speed: float
-    rainfall: float
-    battery_level: float
-    status: str
-
-atmospheric_status_options = ["active", "sleeping", "compromised"]
-
-@app.get("/api/atmosphere")
-def get_atmospheric_data():
-    sensor_data =[]
-    for i in range(5):
-        sensor_data.append(AtmosphericData(
-        sensor_id=f"atmo-{1000 + i}",
-        air_temperature=round(random.uniform(10.0, 40.0), 2),
-        humidity=round(random.uniform(30.0, 90.0), 2),
-        co2=round(random.uniform(300.0, 600.0), 2),
-        wind_speed=round(random.uniform(0.0, 20.0), 2),
-        rainfall=round(random.uniform(0.0, 50.0), 2),
-        battery_level=round(random.uniform(10.0, 100.0), 2),
-        status=random.choice(atmospheric_status_options)
-    ))
-
-    return sensor_data
-
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+@app.get("/logs/{sensor_type}")
+def get_logs(sensor_type: str):
+    logs = []
+    with open("gateway_logs.json", "r") as f:
+        for line in f:
+            record = json.loads(line)
+            if record["data"].get("type", sensor_type) == sensor_type:
+                logs.append(record)
+    return logs
