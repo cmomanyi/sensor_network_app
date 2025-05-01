@@ -1,82 +1,109 @@
-from cryptography.hazmat.primitives.asymmetric import ec
-from cryptography.hazmat.primitives import serialization, hashes
-from cryptography.hazmat.primitives.kdf.hkdf import HKDF
-from cryptography.hazmat.primitives.asymmetric.utils import decode_dss_signature, encode_dss_signature
-from cryptography.hazmat.primitives.ciphers.aead import AESGCM
 import os
+import hashlib
+from cryptography.hazmat.primitives.asymmetric import ec
+from cryptography.hazmat.primitives import hashes, serialization
 
-# ==========================
-# ECC Key Generation & Serialization
-# ==========================
+from cryptography.hazmat.primitives.asymmetric.utils import (
+    encode_dss_signature,
+    decode_dss_signature
+)
 
-def generate_ecc_private_key():
-    return ec.generate_private_key(ec.SECP256R1())
+from cryptography.hazmat.primitives.serialization import (
+    Encoding, PrivateFormat, PublicFormat, NoEncryption,
+    load_pem_private_key
+)
+from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+from cryptography.exceptions import InvalidSignature
 
-def get_ecc_public_key(private_key):
-    return private_key.public_key()
+
+# --- ECC Key Generation & Signing ---
+
+def generate_ecc_key_pair():
+    """Generate a new ECC private/public key pair"""
+    private_key = ec.generate_private_key(ec.SECP256R1())
+    public_key = private_key.public_key()
+    return private_key, public_key
+
+
+def sign_data(private_key, data: bytes):
+    """Sign data with ECC private key"""
+    signature = private_key.sign(data, ec.ECDSA(hashes.SHA256()))
+    return signature
+
+
+def verify_signature(public_key, data: bytes, signature: bytes):
+    """Verify ECC signature"""
+    try:
+        public_key.verify(signature, data, ec.ECDSA(hashes.SHA256()))
+        return True
+    except InvalidSignature:
+        return False
+    except Exception as e:
+        print(f"Signature verification error: {e}")
+        return False
+
 
 def serialize_public_key(public_key):
+    """Serialize public key to bytes"""
     return public_key.public_bytes(
         encoding=serialization.Encoding.PEM,
         format=serialization.PublicFormat.SubjectPublicKeyInfo
     )
 
-def load_public_key(pem_data):
+
+def load_public_key(pem_data: bytes):
+    """Load a public key from PEM bytes"""
     return serialization.load_pem_public_key(pem_data)
 
-def serialize_private_key(private_key):
-    return private_key.private_bytes(
-        encoding=serialization.Encoding.PEM,
-        format=serialization.PrivateFormat.PKCS8,
-        encryption_algorithm=serialization.NoEncryption()
-    )
 
-def load_private_key(pem_data):
-    return serialization.load_pem_private_key(pem_data, password=None)
+# --- AES-GCM Encryption/Decryption ---
 
-# ==========================
-# ECC Signature (Spoofing Protection)
-# ==========================
+def derive_aes_key(seed: bytes) -> bytes:
+    """Derive 128-bit AES key from a shared seed"""
+    return hashlib.sha256(seed).digest()[:16]  # 16 bytes = 128 bits
 
-def ecc_sign(private_key, message_bytes: bytes) -> bytes:
-    signature = private_key.sign(message_bytes, ec.ECDSA(hashes.SHA256()))
-    return signature
 
-def ecc_verify(public_key, message_bytes: bytes, signature: bytes) -> bool:
-    try:
-        public_key.verify(signature, message_bytes, ec.ECDSA(hashes.SHA256()))
-        return True
-    except Exception:
-        return False
-
-# ==========================
-# AES-GCM (Confidentiality)
-# ==========================
-
-def generate_aes_key() -> bytes:
-    return AESGCM.generate_key(bit_length=128)
-
-def aes_encrypt(plaintext: bytes, key: bytes) -> tuple[bytes, bytes]:
-    nonce = os.urandom(12)  # AES-GCM standard nonce size
+def encrypt_data(data: str, key: bytes):
+    """Encrypt plaintext string with AES-GCM"""
+    if len(key) not in [16, 24, 32]:
+        raise ValueError("AES key must be 128, 192, or 256 bits.")
     aesgcm = AESGCM(key)
-    ciphertext = aesgcm.encrypt(nonce, plaintext, None)
+    nonce = os.urandom(12)  # Recommended nonce size for GCM
+    ciphertext = aesgcm.encrypt(nonce, data.encode(), None)
     return nonce, ciphertext
 
-def aes_decrypt(nonce: bytes, ciphertext: bytes, key: bytes) -> str:
+
+def decrypt_data(nonce: bytes, ciphertext: bytes, key: bytes) -> str:
+    """Decrypt AES-GCM encrypted data"""
+    if len(key) not in [16, 24, 32]:
+        raise ValueError("AES key must be 128, 192, or 256 bits.")
     aesgcm = AESGCM(key)
-    plaintext = aesgcm.decrypt(nonce, ciphertext, None)
-    return plaintext.decode()
+    return aesgcm.decrypt(nonce, ciphertext, None).decode()
 
-# ==========================
-# Key Agreement (Optional ECC + AES setup)
-# ==========================
 
-def derive_shared_key(private_key, peer_public_key) -> bytes:
-    shared_secret = private_key.exchange(ec.ECDH(), peer_public_key)
-    derived_key = HKDF(
-        algorithm=hashes.SHA256(),
-        length=16,  # 128 bits
-        salt=None,
-        info=b"gateway-sensor",
-    ).derive(shared_secret)
-    return derived_key
+def save_private_key(private_key, filepath):
+    """Save ECC private key to a PEM file"""
+    with open(filepath, 'wb') as f:
+        f.write(private_key.private_bytes(
+            encoding=Encoding.PEM,
+            format=PrivateFormat.TraditionalOpenSSL,
+            encryption_algorithm=NoEncryption()
+        ))
+
+
+def load_private_key(filepath):
+    """Load ECC private key from a PEM file"""
+    with open(filepath, 'rb') as f:
+        return load_pem_private_key(f.read(), password=None)
+
+
+def save_public_key(public_key, filepath):
+    """Save ECC public key to a PEM file"""
+    with open(filepath, 'wb') as f:
+        f.write(serialize_public_key(public_key))
+
+
+def load_public_key_file(filepath):
+    """Load ECC public key from PEM file"""
+    with open(filepath, 'rb') as f:
+        return load_public_key(f.read())

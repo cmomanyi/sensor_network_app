@@ -1,49 +1,51 @@
-import json, time
-from crypto_utils import aes_decrypt
-from crypto_utils import ecc_verify, aes_decrypt
-from security_utils import is_valid_request, is_sensor_authorized
+import json
+import time
+from crypto_utils import verify_signature, decrypt_data
+from api_simulator import send_to_cloud_api
 
-WHITELIST_IDS = set()
+AUTHORIZED_SENSORS = {
+    "sensor_plant_01": {"public_key": None, "aes_key": b'secret_aes_key_plant'},
+    "sensor_soil_01": {"public_key": None, "aes_key": b'secret_aes_key_soil'},
+    # Add other authorized sensors
+}
 
-def process_sensor_payload(payload):
-    if not is_sensor_authorized(payload["sensor_id"]):
-        raise HTTPException(status_code=403, detail="Unauthorized sensor")
+used_nonces = set()
 
-    # ECC spoofing check
-    public_key = get_public_key(payload["sensor_id"])
-    raw_data = aes_decrypt(payload["aes_nonce"], payload["encrypted_data"], SHARED_AES_KEY)
-    if not ecc_verify(public_key, raw_data.encode(), payload["signature"]):
-        raise HTTPException(status_code=400, detail="Invalid ECC signature")
+def process_sensor_data(sensor_payload):
+    sensor_id = sensor_payload["sensor_id"]
+    if sensor_id not in AUTHORIZED_SENSORS:
+        print("Unauthorized sensor.")
+        return
 
-    # Nonce + timestamp replay attack check
-    parsed = json.loads(raw_data)
-    timestamp = datetime.fromisoformat(parsed["timestamp"])
-    if not is_valid_request(timestamp, parsed["nonce"]):
-        raise HTTPException(status_code=408, detail="Replay attack detected")
+    aes_key = AUTHORIZED_SENSORS[sensor_id]["aes_key"]
+    public_key = AUTHORIZED_SENSORS[sensor_id]["public_key"]
 
-    log_data(parsed)
-    return parsed
-
-def process_sensor_data(sensor_data, aes_key):
-    if sensor_data['sensor_id'] not in WHITELIST_IDS:
-        return "Unauthorized sensor."
+    nonce = bytes.fromhex(sensor_payload["nonce"])
+    encrypted_data = bytes.fromhex(sensor_payload["encrypted_data"])
+    signature = bytes.fromhex(sensor_payload["signature"])
 
     try:
-        decrypted = aes_decrypt(aes_key, sensor_data['payload'])
-        log_event(sensor_data['sensor_id'], decrypted)
-        # Simulate threat detection
-        if sensor_data['type'] == 'threat':
-            data = json.loads(decrypted)
-            if any([data['motion'], data['intrusion']]):
-                print("⚠️ Threat Alert Triggered!")
-        return decrypted
-    except Exception as e:
-        return f"Decryption failed: {str(e)}"
+        decrypted_data = decrypt_data(aes_key, nonce, encrypted_data)
+        if not verify_signature(public_key, decrypted_data, signature):
+            print("Signature verification failed.")
+            return
 
-def log_event(sensor_id, data):
-    with open("gateway_logs.json", "a") as f:
-        f.write(json.dumps({
-            "timestamp": time.time(),
-            "sensor_id": sensor_id,
-            "data": json.loads(data)
-        }) + "\n")
+        data = json.loads(decrypted_data)
+        timestamp = data["timestamp"]
+        nonce_value = data["nonce"]
+
+        if nonce_value in used_nonces or abs(time.time() - timestamp) > 30:
+            print("Replay attack detected.")
+            return
+
+        used_nonces.add(nonce_value)
+        log_data(data)
+        send_to_cloud_api(data)
+
+    except Exception as e:
+        print(f"Error processing data: {e}")
+
+def log_data(data):
+    with open("gateway_log.json", "a") as log_file:
+        json.dump(data, log_file)
+        log_file.write("\n")

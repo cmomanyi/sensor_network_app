@@ -1,46 +1,30 @@
-from http.client import HTTPException
+from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
 
-from fastapi import FastAPI, BackgroundTasks
-
-from security_utils import is_rate_limited
-from sensor import simulate_sensor
-from gateway_lxfta import process_sensor_data, WHITELIST_IDS, log_event
-from api_simulator import receive_data_from_gateway
-from crypto_utils import generate_ecc_key_pair
-import json
+from sensor import Sensor
+from gateway_lxfta import process_sensor_data
 
 app = FastAPI()
 
-# Setup keys and whitelist
-sensor_private, sensor_public = generate_ecc_key_pair()
-gateway_private, gateway_public = generate_ecc_key_pair()
-shared_aes_key = b"thisisakey123456"
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Initialize sensors
+sensor_plant = Sensor("sensor_plant_01", "plant", b'secret_aes_key_plant')
+sensor_soil = Sensor("sensor_soil_01", "soil", b'secret_aes_key_soil')
 
 @app.get("/sensor/{sensor_type}")
-def get_sensor_data(sensor_type: str, background_tasks: BackgroundTasks):
-    if is_rate_limited():
-        raise HTTPException(status_code=429, detail="Too many requests")
-    sensor_data = simulate_sensor(sensor_type, shared_aes_key)
-    WHITELIST_IDS.add(sensor_data["sensor_id"])
-    processed = process_sensor_data(sensor_data, shared_aes_key)
-
-    if "Decryption failed" not in processed:
-        log = {
-            "sensor_id": sensor_data["sensor_id"],
-            "type": sensor_type,
-            "data": json.loads(processed)
-        }
-        background_tasks.add_task(receive_data_from_gateway, log)
-        return log
+def get_sensor_data(sensor_type: str):
+    if sensor_type == "plant":
+        data = sensor_plant.generate_data()
+    elif sensor_type == "soil":
+        data = sensor_soil.generate_data()
     else:
-        return {"error": processed}
+        return {"error": "Invalid sensor type"}
 
-@app.get("/logs/{sensor_type}")
-def get_logs(sensor_type: str):
-    logs = []
-    with open("gateway_logs.json", "r") as f:
-        for line in f:
-            record = json.loads(line)
-            if record["data"].get("type", sensor_type) == sensor_type:
-                logs.append(record)
-    return logs
+    process_sensor_data(data)
+    return {"status": "Data processed"}
