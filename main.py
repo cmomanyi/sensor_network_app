@@ -1,4 +1,8 @@
+from http.client import HTTPException
+
 from fastapi import FastAPI, BackgroundTasks
+
+from security_utils import is_rate_limited
 from sensor import simulate_sensor
 from gateway_lxfta import process_sensor_data, WHITELIST_IDS, log_event
 from api_simulator import receive_data_from_gateway
@@ -14,6 +18,8 @@ shared_aes_key = b"thisisakey123456"
 
 @app.get("/sensor/{sensor_type}")
 def get_sensor_data(sensor_type: str, background_tasks: BackgroundTasks):
+    if is_rate_limited():
+        raise HTTPException(status_code=429, detail="Too many requests")
     sensor_data = simulate_sensor(sensor_type, shared_aes_key)
     WHITELIST_IDS.add(sensor_data["sensor_id"])
     processed = process_sensor_data(sensor_data, shared_aes_key)

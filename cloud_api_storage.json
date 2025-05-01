@@ -1,0 +1,2 @@
+{"sensor_id": "7afba654-18a5-4500-b51d-3ced0700f06a", "type": "threat", "data": {"motion": false, "vibration": 4.1629306474390715, "light_disruption": true, "intrusion": false}}
+{"sensor_id": "b4330af6-4d69-4020-9724-9cc9d16b4941", "type": "soil", "data": {"moisture": 29.308389072858084, "pH": 6.790025211402428, "EC": 0.46713253305576874, "soil_temp": 18.147262842476025}}

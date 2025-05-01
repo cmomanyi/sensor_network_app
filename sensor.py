@@ -1,5 +1,6 @@
 import random, json
-from crypto_utils import aes_encrypt
+from crypto_utils import ecc_sign, aes_encrypt
+from datetime import datetime
 import uuid
 
 def generate_sensor_data(sensor_type):
@@ -31,6 +32,22 @@ def generate_sensor_data(sensor_type):
             "light_disruption": random.choice([True, False]),
             "intrusion": random.choice([True, False])
         }
+def simulate_sensor_data(sensor_id, private_key, aes_key):
+    data = {
+        "sensor_id": sensor_id,
+        "timestamp": datetime.utcnow().isoformat(),
+        "nonce": str(uuid.uuid4()),
+        "data": {...}  # simulated sensor values
+    }
+    raw_data = json.dumps(data).encode()
+    signature = ecc_sign(private_key, raw_data)
+    nonce, encrypted = aes_encrypt(raw_data, aes_key)
+    return {
+        "encrypted_data": encrypted,
+        "aes_nonce": nonce,
+        "signature": signature,
+        "sensor_id": sensor_id
+    }
 
 def simulate_sensor(sensor_type, aes_key):
     data = generate_sensor_data(sensor_type)
