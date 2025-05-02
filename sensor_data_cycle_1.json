@@ -1,302 +1,290 @@
 {
-  "atmospheric_02": {
-    "sensor_id": "atmospheric_02",
-    "timestamp": "2025-05-02T01:30:03.766760",
-    "type": "atmospheric",
-    "data": {
-      "air_temp": 15.1,
-      "humidity": 51.68,
-      "co2": 672.9,
-      "wind_speed": 2.9,
-      "rainfall": 22.2
-    }
-  },
-  "atmospheric_03": {
-    "sensor_id": "atmospheric_03",
-    "timestamp": "2025-05-02T01:30:03.772861",
-    "type": "atmospheric",
-    "data": {
-      "air_temp": 17.1,
-      "humidity": 11.97,
-      "co2": 331.5,
-      "wind_speed": 0.9,
-      "rainfall": 49.1
-    }
-  },
-  "threat_05": {
-    "sensor_id": "threat_05",
-    "timestamp": "2025-05-02T01:30:03.766760",
-    "type": "threat",
-    "data": {
-      "unauthorized_access": 1,
-      "jamming": 82.59,
-      "tampering": 0,
-      "spoofing": 0,
-      "anomaly_score": 0.3
-    }
-  },
-  "water_04": {
-    "sensor_id": "water_04",
-    "timestamp": "2025-05-02T01:30:03.771821",
-    "type": "water",
-    "data": {
-      "flow_rate": 14.94,
-      "water_level": 80.81,
-      "salinity": 84.11,
-      "ph": 8.41,
-      "turbidity": 5.09
-    }
-  },
   "soil_01": {
     "sensor_id": "soil_01",
-    "timestamp": "2025-05-02T01:30:03.771821",
+    "timestamp": "2025-05-02T18:02:52.566607",
     "type": "soil",
     "data": {
-      "moisture": 61.77,
-      "temperature": 12.4,
-      "pH": 8.43,
-      "nitrogen": 72.42,
-      "phosphorus": 57.8
-    }
-  },
-  "atmospheric_01": {
-    "sensor_id": "atmospheric_01",
-    "timestamp": "2025-05-02T01:30:03.766760",
-    "type": "atmospheric",
-    "data": {
-      "air_temp": 28.5,
-      "humidity": 57.81,
-      "co2": 631.0,
-      "wind_speed": 13.3,
-      "rainfall": 37.1
-    }
-  },
-  "water_02": {
-    "sensor_id": "water_02",
-    "timestamp": "2025-05-02T01:30:03.768770",
-    "type": "water",
-    "data": {
-      "flow_rate": 55.8,
-      "water_level": 88.35,
-      "salinity": 45.49,
-      "ph": 7.89,
-      "turbidity": 66.29
-    }
-  },
-  "soil_02": {
-    "sensor_id": "soil_02",
-    "timestamp": "2025-05-02T01:30:03.768770",
-    "type": "soil",
-    "data": {
-      "moisture": 69.84,
-      "temperature": 34.1,
-      "pH": 7.37,
-      "nitrogen": 72.95,
-      "phosphorus": 28.22
-    }
-  },
-  "soil_05": {
-    "sensor_id": "soil_05",
-    "timestamp": "2025-05-02T01:30:03.772861",
-    "type": "soil",
-    "data": {
-      "moisture": 34.55,
-      "temperature": 34.3,
-      "pH": 6.88,
-      "nitrogen": 49.3,
-      "phosphorus": 12.94
-    }
-  },
-  "plant_02": {
-    "sensor_id": "plant_02",
-    "timestamp": "2025-05-02T01:30:03.768770",
-    "type": "plant",
-    "data": {
-      "leaf_moisture": 53.56,
-      "chlorophyll": 44.68,
-      "growth_rate": 56.57,
-      "disease_risk": 0.64,
-      "stem_diameter": 85.14
-    }
-  },
-  "threat_02": {
-    "sensor_id": "threat_02",
-    "timestamp": "2025-05-02T01:30:03.768770",
-    "type": "threat",
-    "data": {
-      "unauthorized_access": 1,
-      "jamming": 47.91,
-      "tampering": 1,
-      "spoofing": 0,
-      "anomaly_score": 0.57
-    }
-  },
-  "water_03": {
-    "sensor_id": "water_03",
-    "timestamp": "2025-05-02T01:30:03.772861",
-    "type": "water",
-    "data": {
-      "flow_rate": 8.65,
-      "water_level": 90.18,
-      "salinity": 19.5,
-      "ph": 7.85,
-      "turbidity": 25.95
-    }
-  },
-  "soil_03": {
-    "sensor_id": "soil_03",
-    "timestamp": "2025-05-02T01:30:03.764750",
-    "type": "soil",
-    "data": {
-      "moisture": 41.44,
-      "temperature": 12.2,
-      "pH": 8.4,
-      "nitrogen": 12.45,
-      "phosphorus": 96.61
-    }
-  },
-  "atmospheric_05": {
-    "sensor_id": "atmospheric_05",
-    "timestamp": "2025-05-02T01:30:03.768770",
-    "type": "atmospheric",
-    "data": {
-      "air_temp": 28.0,
-      "humidity": 16.52,
-      "co2": 666.2,
-      "wind_speed": 13.2,
-      "rainfall": 32.2
-    }
-  },
-  "plant_01": {
-    "sensor_id": "plant_01",
-    "timestamp": "2025-05-02T01:30:03.772861",
-    "type": "plant",
-    "data": {
-      "leaf_moisture": 51.64,
-      "chlorophyll": 48.01,
-      "growth_rate": 46.25,
-      "disease_risk": 0.78,
-      "stem_diameter": 10.36
-    }
-  },
-  "plant_04": {
-    "sensor_id": "plant_04",
-    "timestamp": "2025-05-02T01:30:03.768770",
-    "type": "plant",
-    "data": {
-      "leaf_moisture": 32.04,
-      "chlorophyll": 40.05,
-      "growth_rate": 18.61,
-      "disease_risk": 0.88,
-      "stem_diameter": 67.17
-    }
-  },
-  "plant_05": {
-    "sensor_id": "plant_05",
-    "timestamp": "2025-05-02T01:30:03.770779",
-    "type": "plant",
-    "data": {
-      "leaf_moisture": 16.54,
-      "chlorophyll": 38.79,
-      "growth_rate": 75.65,
-      "disease_risk": 0.32,
-      "stem_diameter": 31.5
-    }
-  },
-  "water_01": {
-    "sensor_id": "water_01",
-    "timestamp": "2025-05-02T01:30:03.770779",
-    "type": "water",
-    "data": {
-      "flow_rate": 31.21,
-      "water_level": 88.52,
-      "salinity": 14.4,
-      "ph": 7.49,
-      "turbidity": 37.28
+      "moisture": 32.69,
+      "temperature": 21.1,
+      "pH": 7.11,
+      "nitrogen": 43.28,
+      "phosphorus": 86.87
     }
   },
   "atmospheric_04": {
     "sensor_id": "atmospheric_04",
-    "timestamp": "2025-05-02T01:30:03.766760",
+    "timestamp": "2025-05-02T18:02:52.564603",
     "type": "atmospheric",
     "data": {
-      "air_temp": 29.0,
-      "humidity": 37.03,
-      "co2": 396.3,
-      "wind_speed": 10.6,
-      "rainfall": 44.2
+      "air_temp": 11.5,
+      "humidity": 12.38,
+      "co2": 450.1,
+      "wind_speed": 13.3,
+      "rainfall": 13.7
     }
   },
   "threat_01": {
     "sensor_id": "threat_01",
-    "timestamp": "2025-05-02T01:30:03.772861",
-    "type": "threat",
-    "data": {
-      "unauthorized_access": 1,
-      "jamming": 86.48,
-      "tampering": 0,
-      "spoofing": 0,
-      "anomaly_score": 0.76
-    }
-  },
-  "threat_03": {
-    "sensor_id": "threat_03",
-    "timestamp": "2025-05-02T01:30:03.770779",
+    "timestamp": "2025-05-02T18:02:52.566607",
     "type": "threat",
     "data": {
       "unauthorized_access": 0,
-      "jamming": 32.42,
+      "jamming": 81.52,
       "tampering": 0,
-      "spoofing": 0,
-      "anomaly_score": 0.04
+      "spoofing": 1,
+      "anomaly_score": 0.42
+    }
+  },
+  "water_04": {
+    "sensor_id": "water_04",
+    "timestamp": "2025-05-02T18:02:52.564603",
+    "type": "water",
+    "data": {
+      "flow_rate": 33.26,
+      "water_level": 59.18,
+      "salinity": 29.61,
+      "ph": 7.42,
+      "turbidity": 71.56
     }
   },
   "water_05": {
     "sensor_id": "water_05",
-    "timestamp": "2025-05-02T01:30:03.771821",
+    "timestamp": "2025-05-02T18:02:52.564603",
     "type": "water",
     "data": {
-      "flow_rate": 82.15,
-      "water_level": 24.21,
-      "salinity": 3.38,
-      "ph": 7.29,
-      "turbidity": 53.51
+      "flow_rate": 91.19,
+      "water_level": 99.72,
+      "salinity": 91.01,
+      "ph": 8.46,
+      "turbidity": 53.35
     }
   },
   "soil_04": {
     "sensor_id": "soil_04",
-    "timestamp": "2025-05-02T01:30:03.771821",
+    "timestamp": "2025-05-02T18:02:52.564603",
     "type": "soil",
     "data": {
-      "moisture": 21.11,
-      "temperature": 11.2,
-      "pH": 8.2,
-      "nitrogen": 24.86,
-      "phosphorus": 94.38
+      "moisture": 74.24,
+      "temperature": 19.3,
+      "pH": 7.72,
+      "nitrogen": 15.78,
+      "phosphorus": 19.9
+    }
+  },
+  "atmospheric_02": {
+    "sensor_id": "atmospheric_02",
+    "timestamp": "2025-05-02T18:02:52.562600",
+    "type": "atmospheric",
+    "data": {
+      "air_temp": 28.6,
+      "humidity": 4.07,
+      "co2": 421.2,
+      "wind_speed": 0.8,
+      "rainfall": 42.7
+    }
+  },
+  "atmospheric_05": {
+    "sensor_id": "atmospheric_05",
+    "timestamp": "2025-05-02T18:02:52.564603",
+    "type": "atmospheric",
+    "data": {
+      "air_temp": 17.7,
+      "humidity": 20.82,
+      "co2": 586.6,
+      "wind_speed": 2.4,
+      "rainfall": 18.1
+    }
+  },
+  "water_02": {
+    "sensor_id": "water_02",
+    "timestamp": "2025-05-02T18:02:52.566607",
+    "type": "water",
+    "data": {
+      "flow_rate": 28.41,
+      "water_level": 52.59,
+      "salinity": 16.22,
+      "ph": 7.37,
+      "turbidity": 90.82
+    }
+  },
+  "soil_02": {
+    "sensor_id": "soil_02",
+    "timestamp": "2025-05-02T18:02:52.564603",
+    "type": "soil",
+    "data": {
+      "moisture": 35.95,
+      "temperature": 26.7,
+      "pH": 5.55,
+      "nitrogen": 16.45,
+      "phosphorus": 54.22
+    }
+  },
+  "atmospheric_03": {
+    "sensor_id": "atmospheric_03",
+    "timestamp": "2025-05-02T18:02:52.562600",
+    "type": "atmospheric",
+    "data": {
+      "air_temp": 34.1,
+      "humidity": 29.92,
+      "co2": 602.0,
+      "wind_speed": 11.4,
+      "rainfall": 9.2
+    }
+  },
+  "threat_03": {
+    "sensor_id": "threat_03",
+    "timestamp": "2025-05-02T18:02:52.566607",
+    "type": "threat",
+    "data": {
+      "unauthorized_access": 1,
+      "jamming": 51.82,
+      "tampering": 0,
+      "spoofing": 0,
+      "anomaly_score": 0.97
+    }
+  },
+  "threat_05": {
+    "sensor_id": "threat_05",
+    "timestamp": "2025-05-02T18:02:52.564603",
+    "type": "threat",
+    "data": {
+      "unauthorized_access": 1,
+      "jamming": 28.94,
+      "tampering": 1,
+      "spoofing": 1,
+      "anomaly_score": 0.27
+    }
+  },
+  "water_01": {
+    "sensor_id": "water_01",
+    "timestamp": "2025-05-02T18:02:52.560596",
+    "type": "water",
+    "data": {
+      "flow_rate": 2.04,
+      "water_level": 25.12,
+      "salinity": 29.91,
+      "ph": 7.24,
+      "turbidity": 69.27
+    }
+  },
+  "atmospheric_01": {
+    "sensor_id": "atmospheric_01",
+    "timestamp": "2025-05-02T18:02:52.562600",
+    "type": "atmospheric",
+    "data": {
+      "air_temp": 21.6,
+      "humidity": 88.9,
+      "co2": 699.4,
+      "wind_speed": 6.4,
+      "rainfall": 48.0
+    }
+  },
+  "plant_02": {
+    "sensor_id": "plant_02",
+    "timestamp": "2025-05-02T18:02:52.562600",
+    "type": "plant",
+    "data": {
+      "leaf_moisture": 22.54,
+      "chlorophyll": 47.01,
+      "growth_rate": 73.27,
+      "disease_risk": 0.64,
+      "stem_diameter": 57.03
+    }
+  },
+  "plant_05": {
+    "sensor_id": "plant_05",
+    "timestamp": "2025-05-02T18:02:52.566607",
+    "type": "plant",
+    "data": {
+      "leaf_moisture": 30.34,
+      "chlorophyll": 22.41,
+      "growth_rate": 59.65,
+      "disease_risk": 0.35,
+      "stem_diameter": 43.49
+    }
+  },
+  "water_03": {
+    "sensor_id": "water_03",
+    "timestamp": "2025-05-02T18:02:52.562600",
+    "type": "water",
+    "data": {
+      "flow_rate": 17.07,
+      "water_level": 39.87,
+      "salinity": 34.03,
+      "ph": 7.8,
+      "turbidity": 63.64
+    }
+  },
+  "soil_03": {
+    "sensor_id": "soil_03",
+    "timestamp": "2025-05-02T18:02:52.566607",
+    "type": "soil",
+    "data": {
+      "moisture": 24.06,
+      "temperature": 21.9,
+      "pH": 6.2,
+      "nitrogen": 81.23,
+      "phosphorus": 56.27
+    }
+  },
+  "soil_05": {
+    "sensor_id": "soil_05",
+    "timestamp": "2025-05-02T18:02:52.566607",
+    "type": "soil",
+    "data": {
+      "moisture": 12.08,
+      "temperature": 16.3,
+      "pH": 8.29,
+      "nitrogen": 37.43,
+      "phosphorus": 52.18
+    }
+  },
+  "threat_02": {
+    "sensor_id": "threat_02",
+    "timestamp": "2025-05-02T18:02:52.564603",
+    "type": "threat",
+    "data": {
+      "unauthorized_access": 0,
+      "jamming": 23.71,
+      "tampering": 0,
+      "spoofing": 1,
+      "anomaly_score": 0.54
+    }
+  },
+  "plant_01": {
+    "sensor_id": "plant_01",
+    "timestamp": "2025-05-02T18:02:52.564603",
+    "type": "plant",
+    "data": {
+      "leaf_moisture": 55.25,
+      "chlorophyll": 25.87,
+      "growth_rate": 37.28,
+      "disease_risk": 0.75,
+      "stem_diameter": 59.12
     }
   },
   "plant_03": {
     "sensor_id": "plant_03",
-    "timestamp": "2025-05-02T01:30:03.766760",
+    "timestamp": "2025-05-02T18:02:52.564603",
     "type": "plant",
     "data": {
-      "leaf_moisture": 68.28,
-      "chlorophyll": 52.78,
-      "growth_rate": 94.06,
-      "disease_risk": 0.52,
-      "stem_diameter": 37.81
+      "leaf_moisture": 19.94,
+      "chlorophyll": 50.86,
+      "growth_rate": 20.74,
+      "disease_risk": 0.65,
+      "stem_diameter": 37.32
     }
   },
-  "threat_04": {
-    "sensor_id": "threat_04",
-    "timestamp": "2025-05-02T01:30:03.770779",
-    "type": "threat",
+  "plant_04": {
+    "sensor_id": "plant_04",
+    "timestamp": "2025-05-02T18:02:52.564603",
+    "type": "plant",
     "data": {
-      "unauthorized_access": 1,
-      "jamming": 50.68,
-      "tampering": 0,
-      "spoofing": 0,
-      "anomaly_score": 0.97
+      "leaf_moisture": 75.27,
+      "chlorophyll": 46.82,
+      "growth_rate": 20.94,
+      "disease_risk": 0.21,
+      "stem_diameter": 45.29
     }
   }
 }
