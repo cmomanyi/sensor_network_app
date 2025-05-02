@@ -1,5 +1,4 @@
-// src/api.js
-import api from './api';
+
 
 
 /**
@@ -19,3 +18,4 @@ export const fetchAllAtmosphericSensors = async () => {
     const response = await fetch("http://localhost:8000/api/atmosphere");
     return response.json();
 };
+

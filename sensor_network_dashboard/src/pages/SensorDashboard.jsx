@@ -13,6 +13,7 @@ import {
     Tooltip,
     Legend,
 } from "chart.js";
+import Layout from "../components/Layout";
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend);
 
@@ -93,11 +94,11 @@ const SensorDashboard = () => {
     };
 
     return (
+        <Layout>
         <div style={{ padding: "20px", fontFamily: "Arial" }}>
-            <header style={{ marginBottom: "20px" }}>
-                <h1>🌐 Sensor Network Dashboard</h1>
-
-                <div style={{ marginBottom: "10px" }}>
+            <header style={{marginBottom: "20px"}}>
+                <h1 className="text-3xl font-bold mb-4">🌐 Sensor Network Dashboard</h1>
+                <div style={{marginBottom: "10px"}}>
                     <label>
                         Sensor Type:{" "}
                         <select value={sensorType} onChange={(e) => setSensorType(e.target.value)}>
@@ -126,6 +127,7 @@ const SensorDashboard = () => {
 
             <main>{renderChart()}</main>
         </div>
+        </Layout>
     );
 };
 
