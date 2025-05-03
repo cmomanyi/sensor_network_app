@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import {
     fetchAllSoilSensors,
     fetchAllAtmosphericSensors,
-} from "./api/api";
+} from "../components/api";
 import { Line } from "react-chartjs-2";
 import {
     Chart as ChartJS,
@@ -13,10 +13,11 @@ import {
     Tooltip,
     Legend,
 } from "chart.js";
+import Layout from "../components/Layout";
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend);
 
-const App = () => {
+const SensorDashboard = () => {
     const [sensorType, setSensorType] = useState("soil");
     const [sensorIndex, setSensorIndex] = useState(0);
     const [allSensors, setAllSensors] = useState([]);
@@ -30,11 +31,11 @@ const App = () => {
                 data = await fetchAllAtmosphericSensors();
             }
             setAllSensors(data);
-            setSensorIndex(0); // Reset to first sensor on type change
+            setSensorIndex(0);
         };
 
         fetchSensors();
-        const interval = setInterval(fetchSensors, 10000); // Refresh every 10s
+        const interval = setInterval(fetchSensors, 10000);
         return () => clearInterval(interval);
     }, [sensorType]);
 
@@ -93,11 +94,11 @@ const App = () => {
     };
 
     return (
+        <Layout>
         <div style={{ padding: "20px", fontFamily: "Arial" }}>
-            <header style={{ marginBottom: "20px" }}>
-                <h1>🌐 Sensor Network Dashboard</h1>
-
-                <div style={{ marginBottom: "10px" }}>
+            <header style={{marginBottom: "20px"}}>
+                <h1 className="text-3xl font-bold mb-4">🌐 Sensor Network Dashboard</h1>
+                <div style={{marginBottom: "10px"}}>
                     <label>
                         Sensor Type:{" "}
                         <select value={sensorType} onChange={(e) => setSensorType(e.target.value)}>
@@ -126,7 +127,8 @@ const App = () => {
 
             <main>{renderChart()}</main>
         </div>
+        </Layout>
     );
 };
 
-export default App;
+export default SensorDashboard;
