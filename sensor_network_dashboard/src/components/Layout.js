@@ -27,6 +27,7 @@ const Layout = ({ children }) => {
                 <div>
                     <Link to="/sensordashboard" style={{ color: "#fff", marginRight: "15px", textDecoration: "none" }}>Dashboard</Link>
                     <Link to="/dashboard" style={{ color: "#fff", marginRight: "15px", textDecoration: "none" }}>MetricsView</Link>
+                    <Link to="/displaymetrix" style={{ color: "#fff", marginRight: "15px", textDecoration: "none" }}>Test sensr data</Link>
                     <Link to="/settings" style={{ color: "#fff", textDecoration: "none" }}>Settings</Link>
 
                 </div>
